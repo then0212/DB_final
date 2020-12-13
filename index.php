@@ -11,28 +11,19 @@ use Monolog\Handler\StreamHandler;
 date_default_timezone_set('Asia/Seoul');
 ini_set('default_charset', 'utf8mb4');
 
-//에러출력하게 하는 코드
-//error_reporting(E_ALL); ini_set("display_errors", 1);
-
 //Main Server API
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    /* ******************   JWT   ****************** */
-    $r->addRoute('POST', '/jwt', ['JWTController', 'createJwt']);   // JWT 생성: 로그인 + 해싱된 패스워드 검증 내용 추가
-    $r->addRoute('GET', '/jwt', ['JWTController', 'validateJwt']);  // JWT 유효성 검사
 
-    /* ******************   Test   ****************** */
-    $r->addRoute('GET', '/', ['IndexController', 'index']);
-    $r->addRoute('GET', '/users', ['IndexController', 'getUsers']);
-    $r->addRoute('GET', '/users/{userIdx}', ['IndexController', 'getUserDetail']);
-    $r->addRoute('POST', '/user', ['IndexController', 'createUser']); // 비밀번호 해싱 예시 추가
+    // 이 아래가 실제 서버에 implement 된 코드 (제출 후 깃허브에 서버 ip 주소가 공개되므로 EC2 서버 인스턴스 종료 예정)
+    $r->addRoute('POST', '/customer', ['IndexController', 'createCustomer']);
+    $r->addRoute('POST', '/login', ['IndexController', 'login']);
+    $r->addRoute('GET', '/rented/{customerID}', ['IndexController', 'rented']);
+    $r->addRoute('GET', '/movie_queue/{customerID}', ['IndexController', 'movie_queue']);
+    $r->addRoute('GET', '/account_type/{customerID}', ['IndexController', 'account_type']);
+    $r->addRoute('GET', '/movie_by_type', ['IndexController', 'movie_by_type']);
+    $r->addRoute('GET', '/search_movie', ['IndexController', 'search_movie']);
+    $r->addRoute('GET', '/search_movie_with_actor_name', ['IndexController', 'search_movie_with_actor_name']);
 
-
-
-//    $r->addRoute('GET', '/users', 'get_all_users_handler');
-//    // {id} must be a number (\d+)
-//    $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
-//    // The /{title} suffix is optional
-//    $r->addRoute('GET', '/articles/{id:\d+}[/{title}]', 'get_article_handler');
 });
 
 // Fetch method and URI from somewhere
@@ -84,30 +75,6 @@ switch ($routeInfo[0]) {
                 $vars = $routeInfo[2];
                 require './controllers/JWTController.php';
                 break;
-            /*case 'EventController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/EventController.php';
-                break;
-            case 'ProductController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/ProductController.php';
-                break;
-            case 'SearchController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/SearchController.php';
-                break;
-            case 'ReviewController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/ReviewController.php';
-                break;
-            case 'ElementController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/ElementController.php';
-                break;
-            case 'AskFAQController':
-                $handler = $routeInfo[1][1]; $vars = $routeInfo[2];
-                require './controllers/AskFAQController.php';
-                break;*/
         }
 
         break;
